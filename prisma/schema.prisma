@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model MockEndpoint {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug      String    @unique
+  label     String?
+  response  Json      @db.JsonB
+  method    String    @default("GET")
+  expiresAt DateTime? @map("expires_at") @db.Timestamptz(6)
+  cors      Boolean   @default(true)
+  hitCount  Int       @default(0) @map("hit_count")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("mock_endpoints")
+}
+
+
