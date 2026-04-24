@@ -126,7 +126,7 @@ export default function Home() {
               <textarea
                 className="mock-api-textarea w-full resize-none bg-transparent px-3 pb-1 pt-2.5 text-base font-medium text-gray-800 outline-none placeholder:text-gray-400 md:text-lg"
                 rows={2}
-                placeholder="describe your API in plain english... e.g. A list of 10 users with id, name, and profile pictures."
+                placeholder="Describe your API in plain english... e.g. A list of 10 users with id, name, and profile pictures."
                 value={prompt}
                 onChange={(event) => setPrompt(event.target.value)}
                 onKeyDown={handlePromptKeyDown}
