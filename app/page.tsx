@@ -100,7 +100,7 @@ export default function Home() {
               <line x1="12" y1="22.08" x2="12" y2="12" />
             </svg>
           </div>
-          <span className="text-xl font-bold tracking-tight">apideck</span>
+          <span className="text-xl font-bold tracking-tight">API Deck</span>
         </div>
 
         <div className="absolute left-1/2 hidden -translate-x-1/2 gap-8 text-sm font-medium text-gray-500 md:flex">
