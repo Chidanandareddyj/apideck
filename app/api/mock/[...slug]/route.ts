@@ -4,9 +4,9 @@ import { NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { slug: string[] } }
+  { params }: { params: Promise<{ slug: string[] }> }
 ) {
-  const [slug, ...pathParts] = params.slug; // first segment is the slug
+  const [slug, ...pathParts] = (await params)?.slug ?? []; // first segment is the slug
 
   const data = await prisma.mockEndpoint.findFirst({
     where: { slug },
