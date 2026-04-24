@@ -103,7 +103,7 @@ export default function Home() {
           <span className="text-xl font-bold tracking-tight">apideck</span>
         </div>
 
-        <div className="hidden gap-8 text-sm font-medium text-gray-500 md:flex">
+        <div className="absolute left-1/2 hidden -translate-x-1/2 gap-8 text-sm font-medium text-gray-500 md:flex">
           <a href="#documentation" className="transition-colors hover:text-gray-900">
             Documentation
           </a>
@@ -112,20 +112,13 @@ export default function Home() {
           </a>
         </div>
 
-        <div>
-          <a
-            href="#"
-            className="rounded-full bg-gray-100 px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-200"
-          >
-            Sign in
-          </a>
-        </div>
+       
       </nav>
 
       <main className="relative flex min-h-screen w-full items-center justify-center">
         <div className="relative z-20 flex w-full max-w-2xl flex-col items-center px-6">
-          <h1 className={`${caveat.className} mb-8 text-center text-6xl tracking-tight text-gray-900 md:text-7xl`}>
-            generate your mock API
+          <h1 className={`${caveat.className} mb-8 text-center text-3xl tracking-tight text-gray-900 md:text-5xl`}>
+          Describe your API data in plain English and get instant mock REST endpoints
           </h1>
 
           <div className="group flex w-full flex-col gap-2 rounded-2xl border border-gray-100 bg-white p-2 shadow-2xl transition-all duration-300 focus-within:ring-4 focus-within:ring-sky-200/50">

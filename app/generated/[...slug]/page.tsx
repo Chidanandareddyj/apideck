@@ -135,27 +135,6 @@ export default async function MockApiReady({ params }: PageProps) {
           </div>
           <span className="text-xl font-bold tracking-tight">apideck</span>
         </div>
-
-        <div className="hidden gap-8 text-sm font-medium text-gray-500 md:flex">
-          <a href="#" className="transition-colors hover:text-gray-900">
-            Documentation
-          </a>
-          <a href="#" className="transition-colors hover:text-gray-900">
-            Examples
-          </a>
-          <a href="#" className="transition-colors hover:text-gray-900">
-            Pricing
-          </a>
-        </div>
-
-        <div>
-          <a
-            href="#"
-            className="rounded-full bg-gray-100 px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-200"
-          >
-            Sign in
-          </a>
-        </div>
       </nav>
 
       <main className="flex h-full w-full flex-col items-center justify-center px-8">
@@ -207,10 +186,10 @@ export default async function MockApiReady({ params }: PageProps) {
                 </p>
                 <div className="flex gap-4 pt-4">
                   <button type="button" className="border-b-2 border-gray-900 pb-1 text-sm font-bold text-gray-900">
-                    Open in Playground
+                    {/* Open in Playground */}
                   </button>
                   <button type="button" className="pb-1 text-sm font-bold text-gray-400 transition-colors hover:text-gray-600">
-                    View Docs
+                    {/* View Docs */}
                   </button>
                 </div>
               </div>
