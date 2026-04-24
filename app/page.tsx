@@ -70,9 +70,10 @@ export default function Home() {
   };
 
   return (
-    <section
-      className={`${inter.className} relative h-screen w-screen overflow-hidden bg-white text-gray-900 antialiased`}
-    >
+    <div className="w-[105.263%] origin-top-left scale-[0.95]">
+      <section
+        className={`${inter.className} relative min-h-screen w-full overflow-x-hidden bg-white text-gray-900 antialiased`}
+      >
       <nav className="fixed left-0 top-0 z-50 flex w-full items-center justify-between bg-white/50 px-8 py-6 backdrop-blur-sm">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-900">
@@ -96,14 +97,11 @@ export default function Home() {
         </div>
 
         <div className="hidden gap-8 text-sm font-medium text-gray-500 md:flex">
-          <a href="#" className="transition-colors hover:text-gray-900">
+          <a href="#documentation" className="transition-colors hover:text-gray-900">
             Documentation
           </a>
-          <a href="#" className="transition-colors hover:text-gray-900">
+          <a href="#examples" className="transition-colors hover:text-gray-900">
             Examples
-          </a>
-          <a href="#" className="transition-colors hover:text-gray-900">
-            Pricing
           </a>
         </div>
 
@@ -117,7 +115,7 @@ export default function Home() {
         </div>
       </nav>
 
-      <main className="relative flex h-full w-full items-center justify-center">
+      <main className="relative flex min-h-screen w-full items-center justify-center">
         <div className="relative z-20 flex w-full max-w-2xl flex-col items-center px-6">
           <h1 className={`${caveat.className} mb-8 text-center text-6xl tracking-tight text-gray-900 md:text-7xl`}>
             generate your mock API
@@ -195,7 +193,7 @@ export default function Home() {
 
         <FloatingCard
           className="w-72 rounded-3xl bg-sky-100 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05),0_0_20px_0_rgba(0,0,0,0.02)] transition-transform duration-300 hover:scale-105 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.1),0_0_20px_0_rgba(0,0,0,0.02)]"
-          style={{ top: "15%", left: "8%", zIndex: 10, ["--rotation" as string]: "-4deg", animationDelay: "0s" }}
+          style={{ top: "16%", left: "6%", zIndex: 10, ["--rotation" as string]: "-4deg", animationDelay: "0s" }}
         >
           <div className="mb-4 inline-block rounded-full bg-sky-200/50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-800">
             Example Call
@@ -220,7 +218,7 @@ export default function Home() {
 
         <FloatingCard
           className="w-80 rounded-3xl bg-orange-100 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05),0_0_20px_0_rgba(0,0,0,0.02)] transition-transform duration-300 hover:scale-105 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.1),0_0_20px_0_rgba(0,0,0,0.02)]"
-          style={{ top: "12%", right: "10%", zIndex: 11, ["--rotation" as string]: "3deg", animationDelay: "-1.5s" }}
+          style={{ top: "14%", right: "6%", zIndex: 11, ["--rotation" as string]: "3deg", animationDelay: "-1.5s" }}
         >
           <div className="mb-4 inline-block rounded-full bg-orange-200/50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-800">
             Mock Endpoint
@@ -257,7 +255,7 @@ export default function Home() {
 
         <FloatingCard
           className="w-72 rounded-3xl bg-emerald-100 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05),0_0_20px_0_rgba(0,0,0,0.02)] transition-transform duration-300 hover:scale-105 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.1),0_0_20px_0_rgba(0,0,0,0.02)]"
-          style={{ bottom: "15%", left: "12%", zIndex: 12, ["--rotation" as string]: "5deg", animationDelay: "-3s" }}
+          style={{ bottom: "6%", left: "8%", zIndex: 12, ["--rotation" as string]: "5deg", animationDelay: "-3s" }}
         >
           <div className="mb-4 inline-block rounded-full bg-emerald-200/50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-800">
             Data Schema
@@ -292,7 +290,7 @@ export default function Home() {
 
         <FloatingCard
           className="w-80 rounded-3xl bg-purple-100 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05),0_0_20px_0_rgba(0,0,0,0.02)] transition-transform duration-300 hover:scale-105 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.1),0_0_20px_0_rgba(0,0,0,0.02)]"
-          style={{ bottom: "12%", right: "12%", zIndex: 13, ["--rotation" as string]: "-2deg", animationDelay: "-4.5s" }}
+          style={{ bottom: "4%", right: "8%", zIndex: 13, ["--rotation" as string]: "-2deg", animationDelay: "-4.5s" }}
         >
           <div className="mb-4 flex items-center justify-between">
             <div className="inline-block rounded-full bg-purple-200/50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-purple-800">
@@ -357,6 +355,44 @@ export default function Home() {
         />
       </main>
 
+      <div className="relative z-20 mx-auto w-full max-w-6xl px-6 pb-16">
+        <section id="documentation" className="mb-10 scroll-mt-28">
+          <h2 className="mb-5 text-xs font-bold uppercase tracking-widest text-gray-400">Documentation</h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="rounded-3xl bg-sky-100 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
+              <h3 className="mb-2 text-sm font-semibold text-gray-900">Create mock endpoint</h3>
+              <p className="text-sm text-gray-600">Describe your data in plain English and generate an endpoint in one step.</p>
+            </div>
+            <div className="rounded-3xl bg-emerald-100 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
+              <h3 className="mb-2 text-sm font-semibold text-gray-900">Schema preview</h3>
+              <p className="text-sm text-gray-600">Review generated schema output before integrating into your app.</p>
+            </div>
+            <div className="rounded-3xl bg-purple-100 p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
+              <h3 className="mb-2 text-sm font-semibold text-gray-900">Use endpoint instantly</h3>
+              <p className="text-sm text-gray-600">Call the generated `/api/mock/{'{slug}'}` URL immediately from frontend or backend.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="examples" className="scroll-mt-28">
+          <h2 className="mb-5 text-xs font-bold uppercase tracking-widest text-gray-400">Examples</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
+              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">E-commerce</p>
+              <code className="block rounded-xl bg-gray-900 p-4 text-xs text-gray-100">
+                A list of 20 products with id, name, price, image and in_stock.
+              </code>
+            </div>
+            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
+              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">SaaS</p>
+              <code className="block rounded-xl bg-gray-900 p-4 text-xs text-gray-100">
+                A list of subscriptions with id, plan_name, status, renewal_date and monthly_price.
+              </code>
+            </div>
+          </div>
+        </section>
+      </div>
+
       <style jsx global>{`
         .floating-card {
           animation: float 6s ease-in-out infinite;
@@ -393,6 +429,7 @@ export default function Home() {
           border-radius: 10px;
         }
       `}</style>
-    </section>
+      </section>
+    </div>
   );
 }

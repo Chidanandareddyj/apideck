@@ -2,7 +2,6 @@ import { model } from "@/app/lib/ai";
 import { generateText, Output } from 'ai';
 import { z } from 'zod';
 import { nanoid } from 'nanoid';
-import type { Prisma } from '@prisma/client';
 import { prisma } from "@/lib/prisma";
 const payloadRecordSchema = z.record(z.string(), z.unknown());
 
@@ -11,8 +10,6 @@ const fixedSchema = z.object({
     suggestedPath: z.string().describe('e.g. /products or /users'),
     itemCount: z.number().optional(),
 });
-
-type GeneratedMockData = z.infer<typeof fixedSchema>;
 
 const requestSchema = z.object({
     prompt: z.string().min(1, 'prompt is required'),
@@ -50,7 +47,7 @@ Suggest a sensible REST path for the data.`,
 
         const slug= nanoid(8);
         const expiration = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
-        const responsePayload = output as unknown as Prisma.InputJsonValue;
+        const responsePayload = JSON.parse(JSON.stringify(output));
 
 
         await prisma.mockEndpoint.create({
