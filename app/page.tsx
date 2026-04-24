@@ -1,6 +1,7 @@
 'use client';
-import type { CSSProperties, ReactNode } from "react";
+import { useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
 import { Caveat, Inter } from "next/font/google";
+import { useRouter } from "next/navigation";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,6 +28,47 @@ function FloatingCard({ className, style, children }: FloatingCardProps) {
 }
 
 export default function Home() {
+  const router = useRouter();
+  const [prompt, setPrompt] = useState('');
+
+  type GenerateMockApiResponse = {
+    id: string;
+  };
+
+  const generateMockApi = async (userPrompt: string): Promise<GenerateMockApiResponse> => {
+    const response = await fetch("/api/generate",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt: userPrompt }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to generate mock API");
+    }
+
+    const data = await response.json();
+    return data as GenerateMockApiResponse;
+  };
+
+  const handleSubmit = async (): Promise<void> => {
+    const trimmedPrompt = prompt.trim();
+    if (!trimmedPrompt) {
+      return;
+    }
+
+    const generated = await generateMockApi(trimmedPrompt);
+    router.push(`/generated/${generated.id}`);
+  };
+
+  const handlePromptKeyDown = async (event: KeyboardEvent<HTMLTextAreaElement>): Promise<void> => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      await handleSubmit();
+    }
+  };
+
   return (
     <section
       className={`${inter.className} relative h-screen w-screen overflow-hidden bg-white text-gray-900 antialiased`}
@@ -87,6 +129,9 @@ export default function Home() {
                 className="mock-api-textarea w-full resize-none bg-transparent px-3 pb-1 pt-2.5 text-base font-medium text-gray-800 outline-none placeholder:text-gray-400 md:text-lg"
                 rows={2}
                 placeholder="describe your API in plain english... e.g. A list of 10 users with id, name, and profile pictures."
+                value={prompt}
+                onChange={(event) => setPrompt(event.target.value)}
+                onKeyDown={handlePromptKeyDown}
               />
             </div>
 
@@ -118,6 +163,7 @@ export default function Home() {
               <button
                 type="button"
                 className="flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-gray-900/20 transition-transform hover:bg-gray-800 active:scale-95"
+                onClick={handleSubmit}
               >
                 Generate
                 <svg
