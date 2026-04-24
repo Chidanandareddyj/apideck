@@ -30,6 +30,7 @@ function FloatingCard({ className, style, children }: FloatingCardProps) {
 export default function Home() {
   const router = useRouter();
   const [prompt, setPrompt] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
 
   type GenerateMockApiResponse = {
     id: string;
@@ -54,12 +55,18 @@ export default function Home() {
 
   const handleSubmit = async (): Promise<void> => {
     const trimmedPrompt = prompt.trim();
-    if (!trimmedPrompt) {
+    if (!trimmedPrompt || isGenerating) {
       return;
     }
 
-    const generated = await generateMockApi(trimmedPrompt);
-    router.push(`/generated/${generated.id}`);
+    setIsGenerating(true);
+
+    try {
+      const generated = await generateMockApi(trimmedPrompt);
+      router.push(`/generated/${generated.id}`);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handlePromptKeyDown = async (event: KeyboardEvent<HTMLTextAreaElement>): Promise<void> => {
@@ -160,24 +167,34 @@ export default function Home() {
 
               <button
                 type="button"
-                className="flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-gray-900/20 transition-transform hover:bg-gray-800 active:scale-95"
+                className="flex min-w-[112px] items-center justify-center gap-2 rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-gray-900/20 transition-transform hover:bg-gray-800 active:scale-95 disabled:cursor-wait disabled:bg-gray-800 disabled:active:scale-100"
                 onClick={handleSubmit}
+                disabled={isGenerating}
+                aria-busy={isGenerating}
               >
-                Generate
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
-                </svg>
+                {isGenerating ? "Generating" : "Generate"}
+                {isGenerating ? (
+                  <span className="generate-dots" aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                  </span>
+                ) : (
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                )}
               </button>
             </div>
           </div>
@@ -307,32 +324,32 @@ export default function Home() {
               <code className="font-mono">
                 <span className="text-gray-500">{"{"}</span>
                 {"\n  "}
-                <span className="text-pink-600">"status"</span>
+                <span className="text-pink-600">&quot;status&quot;</span>
                 <span className="text-gray-500">: </span>
                 <span className="text-blue-600">200</span>
                 <span className="text-gray-500">,</span>
                 {"\n  "}
-                <span className="text-pink-600">"message"</span>
+                <span className="text-pink-600">&quot;message&quot;</span>
                 <span className="text-gray-500">: </span>
-                <span className="text-emerald-600">"Success"</span>
+                <span className="text-emerald-600">&quot;Success&quot;</span>
                 <span className="text-gray-500">,</span>
                 {"\n  "}
-                <span className="text-pink-600">"data"</span>
+                <span className="text-pink-600">&quot;data&quot;</span>
                 <span className="text-gray-500">: [</span>
                 {"\n    "}
                 <span className="text-gray-500">{"{"}</span>
                 {"\n      "}
-                <span className="text-pink-600">"id"</span>
+                <span className="text-pink-600">&quot;id&quot;</span>
                 <span className="text-gray-500">: </span>
-                <span className="text-emerald-600">"8f7b3a..."</span>
+                <span className="text-emerald-600">&quot;8f7b3a...&quot;</span>
                 <span className="text-gray-500">,</span>
                 {"\n      "}
-                <span className="text-pink-600">"title"</span>
+                <span className="text-pink-600">&quot;title&quot;</span>
                 <span className="text-gray-500">: </span>
-                <span className="text-emerald-600">"Coffee Mug"</span>
+                <span className="text-emerald-600">&quot;Coffee Mug&quot;</span>
                 <span className="text-gray-500">,</span>
                 {"\n      "}
-                <span className="text-pink-600">"price"</span>
+                <span className="text-pink-600">&quot;price&quot;</span>
                 <span className="text-gray-500">: </span>
                 <span className="text-blue-600">12.99</span>
                 {"\n    "}
@@ -427,6 +444,41 @@ export default function Home() {
         .mock-api-textarea::-webkit-scrollbar-thumb {
           background-color: #e5e7eb;
           border-radius: 10px;
+        }
+
+        .generate-dots {
+          display: inline-flex;
+          align-items: flex-end;
+          gap: 4px;
+          height: 14px;
+        }
+
+        .generate-dots span {
+          width: 5px;
+          height: 5px;
+          border-radius: 999px;
+          background: currentColor;
+          animation: jump-dot 0.7s ease-in-out infinite;
+        }
+
+        .generate-dots span:nth-child(2) {
+          animation-delay: 0.12s;
+        }
+
+        .generate-dots span:nth-child(3) {
+          animation-delay: 0.24s;
+        }
+
+        @keyframes jump-dot {
+          0%,
+          100% {
+            transform: translateY(0);
+            opacity: 0.7;
+          }
+          50% {
+            transform: translateY(-4px);
+            opacity: 1;
+          }
         }
       `}</style>
       </section>
