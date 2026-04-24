@@ -33,18 +33,53 @@ type MockResponseShape = {
   itemCount?: number;
 };
 
-const inferFieldType = (value: JsonValue | undefined): string => {
-  if (value === null || value === undefined) return "Unknown";
+type JsonSchema = {
+  type: "object" | "array" | "string" | "number" | "boolean" | "null";
+  format?: "uuid" | "date-time";
+  properties?: Record<string, JsonSchema>;
+  items?: JsonSchema;
+};
+
+const toJsonSchema = (value: JsonValue | undefined): JsonSchema => {
+  if (value === null || value === undefined) {
+    return { type: "null" };
+  }
+
   if (typeof value === "string") {
     const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    if (uuidPattern.test(value)) return "UUID";
-    if (!Number.isNaN(Date.parse(value))) return "Date";
-    return "String";
+    if (uuidPattern.test(value)) {
+      return { type: "string", format: "uuid" };
+    }
+    if (!Number.isNaN(Date.parse(value))) {
+      return { type: "string", format: "date-time" };
+    }
+    return { type: "string" };
   }
-  if (typeof value === "number") return Number.isInteger(value) ? "Integer" : "Float";
-  if (typeof value === "boolean") return "Boolean";
-  if (Array.isArray(value)) return "Array";
-  return "Object";
+
+  if (typeof value === "number") {
+    return { type: "number" };
+  }
+
+  if (typeof value === "boolean") {
+    return { type: "boolean" };
+  }
+
+  if (Array.isArray(value)) {
+    return {
+      type: "array",
+      items: value.length > 0 ? toJsonSchema(value[0]) : { type: "null" },
+    };
+  }
+
+  const properties: Record<string, JsonSchema> = {};
+  for (const [key, nestedValue] of Object.entries(value)) {
+    properties[key] = toJsonSchema(nestedValue);
+  }
+
+  return {
+    type: "object",
+    properties,
+  };
 };
 
 export default async function MockApiReady({ params }: PageProps) {
@@ -68,9 +103,10 @@ export default async function MockApiReady({ params }: PageProps) {
   const firstRecord = Array.isArray(responseData)
     ? (responseData[0] as JsonObject | undefined)
     : ((responseData as JsonObject | undefined) ?? undefined);
-  const schemaEntries = Object.entries(firstRecord ?? {});
-  const suggestedPath = parsedResponse?.suggestedPath ?? "";
-  const mockApiPath = suggestedPath ? `/api/mock/${slug}${suggestedPath}` : `/api/mock/${slug}`;
+  const schemaSource: JsonValue | undefined = firstRecord ?? responseData;
+  const generatedJsonSchema = toJsonSchema(schemaSource);
+  const prettyJsonSchema = JSON.stringify(generatedJsonSchema, null, 2);
+  const mockApiPath = `/api/mock/${slug}`;
   const baseUrl = process.env.BASE_URL ?? "";
   const absoluteMockApiPath = baseUrl ? `${baseUrl}${mockApiPath}` : mockApiPath;
 
@@ -127,7 +163,7 @@ export default async function MockApiReady({ params }: PageProps) {
           <h1 className={`${caveat.className} mb-16 text-center text-6xl text-gray-900`}>Your API is ready!</h1>
 
           <div className="grid grid-cols-1 items-stretch gap-12 md:grid-cols-2">
-            <div className="rounded-[2.5rem] bg-emerald-100 p-10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05),0_0_20px_0_rgba(0,0,0,0.02)]">
+            <div className="flex h-[560px] flex-col rounded-[2.5rem] bg-emerald-100 p-10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05),0_0_20px_0_rgba(0,0,0,0.02)]">
               <div className="mb-8 flex items-center justify-between">
                 <h2 className="text-xs font-bold uppercase tracking-widest text-emerald-800/60">Generated Schema</h2>
                 <span className={`${jetbrainsMono.className} rounded-full bg-emerald-200/50 px-2 py-0.5 text-[10px] text-emerald-700`}>
@@ -135,21 +171,10 @@ export default async function MockApiReady({ params }: PageProps) {
                 </span>
               </div>
 
-              <div className="space-y-4">
-                {schemaEntries.length > 0 ? (
-                  schemaEntries.map(([field, value]) => (
-                    <div key={field} className="flex items-center justify-between rounded-2xl border border-emerald-100/50 bg-white/40 p-4">
-                      <span className={`${jetbrainsMono.className} font-semibold text-gray-800`}>{field}</span>
-                      <span className={`${jetbrainsMono.className} rounded bg-emerald-100/50 px-2 py-1 text-xs text-emerald-600`}>
-                        {inferFieldType(value)}
-                      </span>
-                    </div>
-                  ))
-                ) : (
-                  <div className="rounded-2xl border border-emerald-100/50 bg-white/40 p-4">
-                    <span className={`${jetbrainsMono.className} text-sm text-gray-600`}>Schema unavailable.</span>
-                  </div>
-                )}
+              <div className="min-h-0 flex-1 overflow-hidden rounded-2xl bg-gray-900 p-4 shadow-inner">
+                <pre className={`${jetbrainsMono.className} h-full overflow-auto text-xs leading-relaxed text-gray-100`}>
+                  <code>{prettyJsonSchema}</code>
+                </pre>
               </div>
             </div>
 
